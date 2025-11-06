@@ -172,57 +172,6 @@ $(document).ready(function () {
   var $reviewsPaginationSlider = $('.section-reviews-slider-pagination');
   var reviewsPaginationSliderInitialized = false;
 
-  // Helper function to move selected item to center on desktop (>= 1024px)
-  function centerSelectedPaginationItem() {
-    // Only work on desktop when slick is not initialized
-    if ($(window).width() >= 1024 && !reviewsPaginationSliderInitialized) {
-      var $pagination = $('.section-reviews-slider-pagination');
-      var $items = $pagination.children('div');
-      
-      if ($items.length !== 3) return; // Only work with 3 items
-      
-      // Find selected item and center item
-      var $selectedItem = null;
-      var $centerItem = $items.eq(1); // Center is index 1
-      var selectedIndex = -1;
-      
-      $items.each(function(index) {
-        if ($(this).find('.section-reviews-slider-pagination-item').hasClass('selected')) {
-          $selectedItem = $(this);
-          selectedIndex = index;
-          return false; // break
-        }
-      });
-      
-      // If selected item is not already in center, swap them
-      if ($selectedItem && selectedIndex !== 1) {
-        // Add animation class to pagination container
-        $pagination.addClass('reordering');
-        
-        // Detach all items to reorder
-        var $firstItem = $items.eq(0).detach();
-        var $secondItem = $items.eq(1).detach();
-        var $thirdItem = $items.eq(2).detach();
-        
-        // Reorder: selected goes to center (index 1), center goes to selected position
-        if (selectedIndex === 0) {
-          // Selected was first, center was second
-          // New order: center (was second), selected (was first), third
-          $pagination.append($secondItem).append($firstItem).append($thirdItem);
-        } else if (selectedIndex === 2) {
-          // Selected was last, center was second
-          // New order: first, selected (was last), center (was second)
-          $pagination.append($firstItem).append($thirdItem).append($secondItem);
-        }
-        
-        // Remove animation class after animation completes
-        setTimeout(function() {
-          $pagination.removeClass('reordering');
-        }, 500);
-      }
-    }
-  }
-
   // Helper function to update selected class on pagination items
   function updatePaginationSelected(index) {
     // Remove selected from all
@@ -236,46 +185,11 @@ $(document).ready(function () {
         $targetSlide.find('.section-reviews-slider-pagination-item').addClass('selected').attr('aria-pressed', 'true');
       }
     } else {
-      // When Slick is not active, find the correct item by matching content
-      // Get the name from the main slider's current slide
-      var $currentMainSlide = $slider.find('.slick-slide').not('.slick-cloned').eq(index);
-      var currentReviewName = '';
-      
-      if ($currentMainSlide.length) {
-        var slideText = $currentMainSlide.find('p').text();
-        // Extract name from slide text (format: "text...Name, Company")
-        // Names appear at the end: "Name, Company"
-        var nameMatch = slideText.match(/([A-Za-zÀ-ÿÁÉÍÓÚáéíóúâêôãõç\s]+),\s*[A-Za-zÀ-ÿÁÉÍÓÚáéíóúâêôãõç\s-]+$/);
-        if (nameMatch) {
-          currentReviewName = nameMatch[1].trim();
-        }
-      }
-      
-      // Find the pagination item that matches this name
-      var $paginationItems = $reviewsPaginationSlider.children('div');
-      var $targetDiv = null;
-      
-      if (currentReviewName) {
-        $paginationItems.each(function() {
-          var itemName = $(this).find('h4').text().trim();
-          if (itemName === currentReviewName) {
-            $targetDiv = $(this);
-            return false; // break
-          }
-        });
-      }
-      
-      // Fallback to index if name matching fails
-      if (!$targetDiv || $targetDiv.length === 0) {
-        $targetDiv = $paginationItems.eq(index);
-      }
-      
-      if ($targetDiv && $targetDiv.length) {
+      // When Slick is not active, use direct children divs
+      var $targetDiv = $reviewsPaginationSlider.children('div').eq(index);
+      if ($targetDiv.length) {
         $targetDiv.find('.section-reviews-slider-pagination-item').addClass('selected').attr('aria-pressed', 'true');
       }
-      
-      // Move selected item to center on desktop
-      centerSelectedPaginationItem();
     }
   }
 
@@ -308,11 +222,7 @@ $(document).ready(function () {
       $reviewsPaginationSlider.slick('unslick');
       reviewsPaginationSliderInitialized = false;
       
-      // Restore selected state on original divs and center selected item
-      var currentMainSlide = $slider.slick('slickCurrentSlide') || 0;
-      updatePaginationSelected(currentMainSlide);
-    } else if (currentWidth >= 1024 && !reviewsPaginationSliderInitialized) {
-      // On desktop, ensure selected item is centered on initial load
+      // Restore selected state on original divs
       var currentMainSlide = $slider.slick('slickCurrentSlide') || 0;
       updatePaginationSelected(currentMainSlide);
     }
@@ -334,13 +244,31 @@ $(document).ready(function () {
     }, 250);
   });
 
+  // Helper function to update selected class on pagination items
+  function updatePaginationSelected(index) {
+    // Remove selected from all
+    $('.section-reviews-slider-pagination-item').removeClass('selected').attr('aria-pressed', 'false');
+    
+    if (reviewsPaginationSliderInitialized) {
+      // When Slick is active, find the original slide (not cloned) and update it
+      var $originalSlides = $reviewsPaginationSlider.find('.slick-slide').not('.slick-cloned');
+      var $targetSlide = $originalSlides.eq(index);
+      if ($targetSlide.length) {
+        $targetSlide.find('.section-reviews-slider-pagination-item').addClass('selected').attr('aria-pressed', 'true');
+      }
+    } else {
+      // When Slick is not active, use direct children divs
+      var $targetDiv = $reviewsPaginationSlider.children('div').eq(index);
+      if ($targetDiv.length) {
+        $targetDiv.find('.section-reviews-slider-pagination-item').addClass('selected').attr('aria-pressed', 'true');
+      }
+    }
+  }
+
   // Handle pagination item clicks
   $(document).on('click', '.section-reviews-slider-pagination-item', function() {
     var $button = $(this);
     var index;
-    
-    // Identify which review this button represents by matching the name with slider content
-    var buttonName = $button.find('h4').text().trim();
     
     if (reviewsPaginationSliderInitialized) {
       // When Slick is active, find which original slide contains this button
@@ -349,8 +277,9 @@ $(document).ready(function () {
         // If it's a clone, we need to find which original it represents
         // Get all original slides and find the one that matches the button content
         var $originalSlides = $reviewsPaginationSlider.find('.slick-slide').not('.slick-cloned');
+        var buttonText = $button.find('h4').text();
         $originalSlides.each(function(i) {
-          if ($(this).find('h4').text().trim() === buttonName) {
+          if ($(this).find('h4').text() === buttonText) {
             index = i;
             return false; // break
           }
@@ -361,22 +290,8 @@ $(document).ready(function () {
         index = $originalSlides.index($parentSlide);
       }
     } else {
-      // When Slick is not active, find index by matching name with slider items
-      // This ensures we get the correct index even after items are swapped
-      var $sliderItems = $slider.find('.slick-slide').not('.slick-cloned');
-      $sliderItems.each(function(i) {
-        var slideText = $(this).find('p').text();
-        // Match by checking if the button name appears in the slide text
-        if (slideText.indexOf(buttonName) !== -1) {
-          index = i;
-          return false; // break
-        }
-      });
-      
-      // Fallback to div index if name matching fails
-      if (index === undefined) {
-        index = $button.closest('div').index();
-      }
+      // When Slick is not active, use direct div index
+      index = $button.closest('div').index();
     }
     
     // Ensure index is valid
@@ -392,7 +307,7 @@ $(document).ready(function () {
       $reviewsPaginationSlider.slick('slickGoTo', index);
     }
     
-    // Update selected class (this will also center the item on desktop)
+    // Update selected class
     updatePaginationSelected(index);
   });
 
@@ -704,5 +619,12 @@ $(document).ready(function () {
       scrollTop: $form.offset().top - 100
     }, 300);
   }
+
+  // Footer button top functionality
+  $('.footer-button-top').on('click', function() {
+    $('html, body').animate({
+      scrollTop: 0
+    }, 300);
+  });
 });
 

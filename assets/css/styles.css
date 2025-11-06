@@ -7,11 +7,13 @@
     box-sizing: border-box;
 }
 
-body, html {
+body,
+html {
     scroll-behavior: smooth;
 }
 
-button, a {
+button,
+a {
     cursor: pointer;
 }
 
@@ -27,6 +29,7 @@ button, a {
     padding: 8px 12px;
     z-index: 9999;
 }
+
 .skip-to-content:focus {
     left: 20px;
     top: 20px;
@@ -1284,34 +1287,6 @@ header nav ul li a {
     margin: 0 auto;
 }
 
-.section-reviews-slider-pagination > div {
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
-}
-
-.section-reviews-slider-pagination.reordering > div {
-    animation: paginationItemSlide 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes paginationItemSlide {
-    0% {
-        opacity: 0.8;
-        transform: scale(0.98) translateY(-2px);
-    }
-    50% {
-        opacity: 0.95;
-        transform: scale(1.02) translateY(2px);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
-}
-
-/* Smooth transition when items swap positions */
-.section-reviews-slider-pagination.reordering > div {
-    will-change: transform, opacity;
-}
-
 .section-reviews-slider-pagination-item {
     aspect-ratio: 3.63 / 1;
     position: relative;
@@ -1699,6 +1674,30 @@ header nav ul li a {
 /* ============================================
    FOOTER
    ============================================ */
+footer {
+    position: relative;
+}
+
+.footer-button-top {
+    position: absolute;
+    top: -29px;
+    left: calc(50% - 29px);
+    width: 58px;
+    height: 58px;
+    background-color: transparent;
+    border: 1px solid #C5C5C5;
+    border-radius: 50%;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+
+.footer-button-top:hover {
+    background-color: rgba(0, 0, 0, 0.397);
+    border: 1px solid #C5C5C5;
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
 .footer-container {
     padding: 60px 80px;
     background-color: #1E1E41;
@@ -1818,7 +1817,7 @@ header nav ul li a {
     aspect-ratio: 16 / 9;
     margin: 0;
     background: #0B0B0B;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     border-radius: 6px;
 }
 
@@ -1881,13 +1880,16 @@ header nav ul li a {
         font-size: 58px;
         line-height: 64px;
     }
+
     .section-hero-container-description {
         font-size: 14px;
         line-height: 24px;
     }
+
     .section-hero-person-img {
         right: 150px;
     }
+
     .section-hero-container-tag {
         right: 115px;
     }
@@ -1963,7 +1965,8 @@ header nav ul li a {
     }
 }
 
-@media (max-width: 1023px) {   
+@media (max-width: 1023px) {
+
     /* Mobile menu styles */
     .mobile-menu-toggle {
         display: flex;
@@ -2025,12 +2028,12 @@ header nav ul li a {
     .section-benefits-container-benefits.slick-initialized {
         display: block;
     }
-    
+
     /* Reviews pagination slider - remove grid when slick is active */
     .section-reviews-slider-pagination.slick-initialized {
         display: block;
     }
-    
+
     .section-benefits {
         padding: 60px 20px;
     }
@@ -2038,12 +2041,12 @@ header nav ul li a {
     .section-benefits-container-benefits-item-img {
         width: 100%;
     }
-    
+
     /* Utilities slider - remove grid when slick is active */
     .section-utilities-container-content.slick-initialized {
         display: block;
     }
-    
+
     .section-utilities {
         padding: 60px 20px 120px 20px;
     }
@@ -2097,7 +2100,7 @@ header nav ul li a {
     .connector-free-trial-mobile a:hover {
         opacity: 0.8;
     }
-    
+
     .section-utilities-container-content {
         width: calc(100vw - 40px);
     }
@@ -2110,7 +2113,7 @@ header nav ul li a {
         padding: 46px 20px 0px 20px;
         background-image: none;
     }
-    
+
     .section-hero-container {
         justify-content: center;
         align-items: center;
@@ -2255,7 +2258,7 @@ header nav ul li a {
         font-size: 24px;
         line-height: 32px;
     }
-    
+
     .section-benefits-container-content h2 {
         font-size: 24px;
         line-height: 32px;
@@ -2304,7 +2307,7 @@ header nav ul li a {
     .section-steps-container-steps {
         width: calc(100vw - 40px);
     }
-    
+
     .section-plans-header {
         height: auto;
         padding: 32px;
@@ -2391,7 +2394,7 @@ header nav ul li a {
         width: 18px;
         height: 13px;
     }
-    
+
     .section-reviews {
         padding: 60px 20px;
     }
@@ -2416,7 +2419,7 @@ header nav ul li a {
     .section-reviews-slider-container {
         margin-bottom: 32px
     }
-    
+
     .section-reviews-slider-pagination-item {
         width: 312px;
         margin: 0 auto;
@@ -2454,7 +2457,7 @@ header nav ul li a {
         width: 11px;
         height: 1px;
     }
-    
+
     .section-projects-toggle .icon-plus svg {
         width: 11px;
         height: 11px;
@@ -2485,10 +2488,10 @@ header nav ul li a {
     .section-contact-container-content {
         align-items: center;
         padding: 30px 20px;
-       position: relative;
-       max-width: 100%;
-       width: 100%;
-        
+        position: relative;
+        max-width: 100%;
+        width: 100%;
+
     }
 
     .section-contact-container-content p {
@@ -2543,7 +2546,7 @@ header nav ul li a {
         flex-direction: column;
         gap: 26px;
     }
-    
+
     .section-steps-container>p {
         margin-bottom: 64px;
     }
