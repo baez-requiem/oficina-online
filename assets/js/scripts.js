@@ -626,5 +626,17 @@ $(document).ready(function () {
       scrollTop: 0
     }, 300);
   });
+
+  // Plan card highlight functionality
+  $('.section-plans-container-plan button').on('click', function() {
+    var $button = $(this);
+    var $planCard = $button.closest('.section-plans-container-plan');
+    
+    // Remove highlight from all cards
+    $('.section-plans-container-plan').removeClass('highlighted');
+    
+    // Add highlight to clicked card
+    $planCard.addClass('highlighted');
+  });
 });
 
