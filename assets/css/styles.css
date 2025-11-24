@@ -1906,13 +1906,21 @@ footer {
         line-height: 64px;
     }
 
+    .section-steps-container-steps-item-arrow {
+        min-width: 20px;
+    }
+
+    .section-steps-container-steps-item-arrow img {
+        display: none;
+    }
+
     .section-hero-container-description {
         font-size: 14px;
         line-height: 24px;
     }
 
     .section-hero-person-img {
-        right: 150px;
+        right: 40px;
     }
 
     .section-hero-container-tag {
@@ -1987,6 +1995,15 @@ footer {
     .section-contact form {
         padding: 20px;
         margin: 40px 40px 40px 0px;
+    }
+
+    .section-hero-container-subtitle .line {
+        display: none;
+    }
+
+    .section-hero {
+        /* padding: 46px 20px 0px 20px; */
+        background-image: none;
     }
 }
 
